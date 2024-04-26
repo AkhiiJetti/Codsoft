@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator using HTML, CSS and Javascript</title>
+</head>
+<body>
+    <style>
+        body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: rgb(201, 224, 224);
+    background-image:url("https://res.cloudinary.com/dn1n5qgkq/image/upload/v1713531940/zbnhsdjinpilib3b8kpr.avif");
+}
+
+h1 {
+  color: white;
+}
+
+
+.calc-container {
+  width: 400px;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px;
+    grid-template-rows: 100px 70px 70px 70px 70px 70px;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: white;
+    background-color: black;
+  }
+
+  input {
+    background-color:plum;
+    border: 1px solid black;
+    font-size: 20px;
+    border-radius:10px;
+    color: black;
+    
+  }
+
+  input:hover {
+    background-color: plum;
+  }
+
+  .operators {
+    font-size: 25px;
+    border-radius: 10px;
+    background-color: plum;
+  
+  }
+
+  .screen {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+
+    grid-column: 1/5;
+    height: 100px;
+    font-size: 35px;
+    padding: 0px 20px;
+
+    color:black;
+    background-color: white;
+  }
+
+  .equal {
+    grid-column: 4/5;
+    grid-row: 3/7;
+    background: plum;
+  }
+
+  .equal:hover {
+    background-color: plum;
+    
+  }
+
+  .clear {
+    font-weight: 700;
+    color:black;
+    
+  }
+
+  .clear:hover {
+    color: black;
+  }
+    
+    </style>
+    <div class="calc-container">
+      <div class="screen"><p></p></div>
+      <input type="button" value="+" class="keys operators" />
+      <input type="button" value="-" class="keys operators" />
+      <input type="button" value="x" class="keys operators" />
+      <input type="button" value="/" class="keys operators" />
+      <input type="button" value="7" class="keys" />
+      <input type="button" value="8" class="keys" />
+      <input type="button" value="9" class="keys" />
+      <input type="button" value="=" class="keys equal" />
+      <input type="button" value="4" class="keys" />
+      <input type="button" value="5" class="keys" />
+      <input type="button" value="6" class="keys" />
+      <input type="button" value="1" class="keys" />
+      <input type="button" value="2" class="keys" />
+      <input type="button" value="3" class="keys" />
+      <input type="button" value="." class="keys" />
+      <input type="button" value="0" class="keys" />
+      <input type="button" value="C" class="keys clear" />
+    </div>
+    <script>
+        let expString = "";
+let outputStr = "";
+let validInput = true;
+
+// SELECTING ELEMENTS FROM DOM
+const keys = document.querySelectorAll(`.keys`);
+let output = document.querySelector(".screen").children[0];
+
+// HANDLING KEYS CLICK EVENT USING ARRAY METHOD
+Array.from(keys).forEach((key) => {
+  key.addEventListener("click", (event) => {
+    // HANDLING INVALID INPUT
+    if (validInput === false) {
+      expString = "";
+      outputStr = "";
+      validInput = true;
+    }
+
+    if (event.target.value == "C") {
+      // CLEAR STRING AND SCREEN
+      expString = "";
+      outputStr = "";
+    } else if (event.target.value == "x") {
+      // HANDLING x CASE
+      expString = expString + "*";
+      outputStr = outputStr + "x";
+    } else if (event.target.value == "=") {
+      // EVALUATION OF EXPRESSION STRING
+      try {
+        const validInputStr = /^[0-9+\-*/. ]*$/;
+        if (!validInputStr.test(expString)) {
+          throw new Error("invalid input");
+        }
+        expString = eval(expString);
+
+        // handling undefined case
+        if (expString === undefined) {
+          throw new Error("invalid input");
+        }
+      } catch (err) {
+        // handling errors
+        expString = "invalid input";
+        validInput = false;
+      }
+      outputStr = expString;
+    } else {
+      // GENERATING EXPRESSION STRING AND SCREEN OUTPUT
+      expString = expString + event.target.value;
+      outputStr = outputStr + event.target.value;
+    }
+
+    // OUTPUT TO THE SCREEN
+    output.innerHTML = outputStr;
+  });
+});
+    </script>
+</body>
+</html>
